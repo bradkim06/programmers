@@ -3,7 +3,7 @@ import java.util.*;
 class Solution {
     public int[] solution(int N, int[] stages) {
         int[] answer = new int[N];
-        int[] countStageUser = new int[N];
+        int[] countFailUser = new int[N];
 
         Map<Integer, Float> map = new HashMap<>();
 
@@ -11,7 +11,7 @@ class Solution {
             if (stages[i] == N + 1) {
                 continue;
             }
-            countStageUser[stages[i] - 1]++;
+            countFailUser[stages[i] - 1]++;
         }
 
         int numStageUser = stages.length;
@@ -21,8 +21,9 @@ class Solution {
                 continue;
             }
 
-            map.put(i, (float) countStageUser[i] / (float) numStageUser);
-            numStageUser -= countStageUser[i];
+            System.out.printf("countUser : %d Total : %d\n", countFailUser[i], numStageUser);
+            map.put(i, (float) countFailUser[i] / (float) numStageUser);
+            numStageUser -= countFailUser[i];
         }
 
         List<Integer> keySetList = new ArrayList<>(map.keySet());
