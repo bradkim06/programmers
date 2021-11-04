@@ -5,52 +5,75 @@ class Solution {
         int[] answer = new int[places.length];
 
         for (int i = 0; i < places.length; i++) {
-            String[] p = places[i];
+            String[] str = places[i];
+            answer[i] = 1;
 
-            boolean isOk = true;
-            for (int r = 0; r < 5 && isOk; r++) {
-                for (int c = 0; c < 5 && isOk; c++) {
-                    if (p[r].charAt(c) == 'P') {
-                        if (!bfs(r, c, p)) {
-                            isOk = false;
+            boolean fail = false;
+            for (int x = 0; x < str.length; x++) {
+                if (fail) {
+                    break;
+                }
+
+                for (int y = 0; y < str[x].length(); y++) {
+                    if (str[x].charAt(y) == 'P') {
+                        if (bfs(str, x, y)) {
+                            fail = true;
+                            answer[i] = 0;
                             break;
                         }
                     }
                 }
             }
-            answer[i] = isOk ? 1 : 0;
         }
 
         return answer;
     }
 
-    private static boolean bfs(int r, int c, String[] p) {
+    static public boolean bfs(String[] str, int x1, int y1) {
         int dr[] = { -1, 1, 0, 0 };
         int dc[] = { 0, 0, -1, 1 };
 
         Queue<int[]> queue = new LinkedList<int[]>();
-        queue.offer(new int[] { r, c });
+        queue.add(new int[] { x1, y1 });
+        boolean[][] visit = new boolean[5][5];
+        visit[x1][y1] = true;
 
         while (!queue.isEmpty()) {
-            int[] position = queue.poll();
+            int[] curr = queue.poll();
 
             for (int i = 0; i < 4; i++) {
-                int nr = position[0] + dr[i];
-                int nc = position[1] + dc[i];
+                int nx = curr[0] + dr[i];
+                int ny = curr[1] + dc[i];
 
-                if (nr < 0 || nc < 0 || nr >= 5 || nc >= 5 || (nr == r && nc == c))
+                if (nx < 0 || ny < 0) {
                     continue;
+                }
 
-                int d = Math.abs(nr - r) + Math.abs(nc - c);
+                if (nx >= str.length || ny >= str[0].length()) {
+                    continue;
+                }
 
-                if (p[nr].charAt(nc) == 'P' && d <= 2)
-                    return false;
-                else if (p[nr].charAt(nc) == 'O' && d < 2)
-                    queue.offer(new int[] { nr, nc });
+                if (visit[nx][ny]) {
+                    continue;
+                }
+
+                visit[nx][ny] = true;
+                int distance = Math.abs(nx - x1) + Math.abs(ny - y1);
+                char ch = str[nx].charAt(ny);
+
+                if (ch == 'X' || distance > 2) {
+                    continue;
+                }
+
+                if (ch == 'P') {
+                    return true;
+                } else if (ch == 'O') {
+                    queue.add(new int[] { nx, ny });
+                }
             }
         }
 
-        return true;
+        return false;
     }
 
     public static void main(String... args) {

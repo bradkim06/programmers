@@ -1,0 +1,35 @@
+import java.util.*;
+
+class Solution {
+    public static int[] solution(String[][] places) {
+        int[] answer = new int[places.length];
+
+        for (int i = 0; i < places.length; i++) {
+            String[] str = places[i];
+
+            for (int x = 0; x < str.length; x++) {
+                for (int y = 0; y < str[x].length(); y++) {
+                    if (str[x].charAt(y) == 'P') {
+                        bfs(str, x, y);
+                    }
+                }
+            }
+        }
+
+        return answer;
+    }
+
+    public static void main(String... args) {
+        Solution test = new Solution();
+
+        String[][] places = { { "POOOP", "OXXOX", "OPXPX", "OOXOX", "POXXP" },
+                { "POOPX", "OXPXP", "PXXXO", "OXXXO", "OOOPP" }, { "PXOPX", "OXOXP", "OXPOX", "OXXOP", "PXPOX" },
+                { "OOOXX", "XOOOX", "OOOXX", "OXOOX", "OOOOO" }, { "PXPXP", "XPXPX", "PXPXP", "XPXPX", "PXPXP" } };
+
+        for (int i = 0; i < places.length; i++) {
+            System.out.println(Arrays.toString(places[i]));
+        }
+
+        System.out.println(Arrays.toString(test.solution(places)));
+    }
+}
