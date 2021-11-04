@@ -63,7 +63,7 @@ class Solution {
             }
 
             visited[i] = true;
-            dfs(orders, visited, str + orders[i], max, i);
+            dfs(orders, visited, str + orders[i], max, i + 1);
             visited[i] = false;
         }
     }
