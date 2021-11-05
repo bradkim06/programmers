@@ -1,51 +1,30 @@
 import java.util.*;
-import java.util.Map.Entry;
 
 class Solution {
-    public final int[] STUDENT1 = { 1, 2, 3, 4, 5 };
-    public final int[] STUDENT2 = { 2, 1, 2, 3, 2, 4, 2, 5 };
-    public final int[] STUDENT3 = { 3, 3, 1, 1, 2, 2, 4, 4, 5, 5 };
+    public int[] solution(int[][] v) {
+        int[] answer = new int[2];
 
-    public int[] solution(int[] answers) {
-        int[][] student = { STUDENT1, STUDENT2, STUDENT3 };
+        Arrays.sort(v, (o1, o2) -> o1[0] - o2[0]);
 
-        Map<Integer, Integer> map = new HashMap<>();
+        int x = 0, y = 0;
 
-        for (int i = 0; i < answers.length; i++) {
-            for (int j = 0; j < student.length; j++) {
-                int mark = student[j][i % student[j].length];
+        for (int i = 0; i < v.length - 1; i++) {
+            x = Math.max(x, Math.abs(v[i][0] - v[i + 1][0]));
+            y = Math.max(y, Math.abs(v[i][1] - v[i + 1][1]));
+        }
 
-                if (mark == answers[i]) {
-                    map.put(j + 1, map.getOrDefault(j + 1, 0) + 1);
+        int[] dx = { x, 0, x };
+        int[] dy = { 0, y, y };
+
+        for (int i = 0; i < 3; i++) {
+            answer[0] = v[0][0] + dx[i];
+            answer[1] = v[0][1] + dy[i];
+
+            for (int j = 1; j < v.length; j++) {
+                if (answer[0] != v[j][0] && answer[1] != v[j][1]) {
+                    return answer;
                 }
             }
-        }
-        List<Entry<Integer, Integer>> list_entries = new ArrayList<Entry<Integer, Integer>>(map.entrySet());
-
-        Collections.sort(list_entries, new Comparator<Entry<Integer, Integer>>() {
-            public int compare(Entry<Integer, Integer> obj1, Entry<Integer, Integer> obj2) {
-                return obj2.getValue().compareTo(obj1.getValue());
-            }
-        });
-
-        ArrayList<Integer> list = new ArrayList<>();
-        int maxScore = 0;
-
-        for (Entry<Integer, Integer> entry : list_entries) {
-            if (list.isEmpty()) {
-                maxScore = entry.getValue();
-                list.add(entry.getKey());
-            } else if (maxScore == entry.getValue()) {
-                list.add(entry.getKey());
-            } else {
-                break;
-            }
-        }
-
-        int[] answer = new int[list.size()];
-
-        for (int i = 0; i < list.size(); i++) {
-            answer[i] = list.get(i);
         }
 
         return answer;
@@ -54,7 +33,10 @@ class Solution {
     public static void main(String... args) {
         Solution test = new Solution();
 
-        int[] answers = { 1, 1, 2, 3, 2 };
-        System.out.println(Arrays.toString(test.solution(answers)));
+        int[][] v = { { 1, 4 }, { 3, 4 }, { 3, 10 } };
+        int[][] v2 = { { 1, 1 }, { 2, 2 }, { 1, 2 } };
+
+        System.out.println(Arrays.toString(test.solution(v)));
+        System.out.println(Arrays.toString(test.solution(v2)));
     }
 }
